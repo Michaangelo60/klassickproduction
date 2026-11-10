@@ -619,7 +619,7 @@
         </div>
     </main>
     <footer>
-        <div class="wrap">© <span id="year"></span> KLASSIKROOM · Beat catalog · <a href="admin/index.html">Admin</a></div>
+        <div class="wrap">© <span id="year"></span> KLASSIKROOM · Beat catalog · <a href="https://klassickadmin.onrender.com/">Admin</a></div>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="site-data.js"></script>
@@ -627,10 +627,6 @@
         (async () => {
         await SiteData.ready;
         const beats = SiteData.getBeats();
-        const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-        const apiBase = isLocalhost
-            ? `${window.location.protocol}//${window.location.hostname}:3000`
-            : window.location.origin;
         const cartKey = "klassikroom.cart";
         let cart = readCart();
         let cartOpen = false;
@@ -765,7 +761,7 @@
                 return;
             }
             const beatIds = selected.map(beat => beat.id).join(",");
-            window.location.href = `${apiBase}/api/checkout/whatsapp?beats=${encodeURIComponent(beatIds)}`;
+            window.location.href = `${SiteData.apiURL("/api/checkout/whatsapp")}?beats=${encodeURIComponent(beatIds)}`;
         };
         document.addEventListener("click", event => {
             const button = event.target.closest(".play");

@@ -724,7 +724,7 @@
       <div class="footer-links">
         <a href="index.html">Home</a>
         <a href="beats.html">Beat store</a>
-        <a href="admin/index.html">Admin</a>
+        <a href="https://klassickadmin.onrender.com/">Admin</a>
       </div>
     </div>
   </footer>
@@ -787,16 +787,12 @@
     await SiteData.ready;
     const musicGrid = document.getElementById("music-grid");
     const musicEsc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[char]));
-    const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-    const apiBase = isLocalhost
-      ? `${window.location.protocol}//${window.location.hostname}:3000`
-      : window.location.origin;
     const catalogAudio = new Audio();
     musicGrid.innerHTML = SiteData.getMusic().map(track => `<article class="card">
       <div class="cover"><img loading="lazy" src="${musicEsc(track.image)}" alt="${musicEsc(track.title)} album art"><span class="label">${musicEsc(track.genre)}</span></div>
       <div class="meta"><span>${musicEsc(track.year)}</span><span>${musicEsc(track.duration)}</span></div>
       <h3 class="name">${musicEsc(track.title)}</h3><p class="desc">${musicEsc(track.description)}</p>
-      <div class="player-actions"><button class="track-btn play-track" type="button" data-track="${musicEsc(track.title)}" data-src="${musicEsc(track.audio)}">Play</button>${track.audio ? `<a class="track-btn download" href="${musicEsc(apiBase)}/api/music/download/${encodeURIComponent(track.id)}">Download</a>` : ""}</div>
+      <div class="player-actions"><button class="track-btn play-track" type="button" data-track="${musicEsc(track.title)}" data-src="${musicEsc(track.audio)}">Play</button>${track.audio ? `<a class="track-btn download" href="${musicEsc(SiteData.apiURL(`/api/music/download/${encodeURIComponent(track.id)}`))}">Download</a>` : ""}</div>
       <div class="foot"><span>${track.bpm ? musicEsc(track.bpm) + " BPM" : ""}</span><span>${musicEsc(track.type || "Release")}</span></div>
     </article>`).join("") || '<div class="release-empty">No releases published yet.</div>';
     musicGrid.querySelectorAll("img[src]").forEach(image => {

@@ -35,7 +35,7 @@
     const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
     const apiBase = isLocalhost
         ? `${window.location.protocol}//${window.location.hostname}:3000`
-        : window.location.origin;
+        : "https://backendklassic.onrender.com";
     function read(key) {
         const saved = localStorage.getItem(keys[key]);
         return saved === null ? JSON.parse(JSON.stringify(defaults[key])) : JSON.parse(saved);
@@ -114,6 +114,7 @@
         checkAdminSession: () => request("/api/admin/session"),
         logout: () => request("/api/admin/logout", { method: "POST" }),
         assetURL,
+        apiURL: path => new URL(path, apiBase).href,
         reset: () => Object.keys(keys).forEach(key => localStorage.removeItem(keys[key]))
     };
 }());
