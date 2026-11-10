@@ -36,6 +36,7 @@
     const apiBase = isLocalhost
         ? `${window.location.protocol}//${window.location.hostname}:3000`
         : "https://backendklassic.onrender.com";
+    const adminTokenKey = "klassikroom.admin-session";
     function read(key) {
         const saved = localStorage.getItem(keys[key]);
         return saved === null ? JSON.parse(JSON.stringify(defaults[key])) : JSON.parse(saved);
@@ -44,13 +45,16 @@
         localStorage.setItem(keys[key], JSON.stringify(value));
     }
     async function request(path, options = {}) {
+        const headers = {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...options.headers
+        };
+        const adminToken = sessionStorage.getItem(adminTokenKey);
+        if (adminToken) headers.Authorization = `Bearer ${adminToken}`;
         const response = await fetch(new URL(path, apiBase), {
             ...options,
             credentials: "include",
-            headers: {
-                ...(options.body ? { "Content-Type": "application/json" } : {}),
-                ...options.headers
-            }
+            headers
         });
         if (response.status === 204) return null;
         const text = await response.text();
@@ -60,7 +64,10 @@
         } catch {
             throw new Error("The server returned an invalid response.");
         }
-        if (!response.ok) throw new Error(result?.error || `The request failed (HTTP ${response.status}).`);
+        if (!response.ok) {
+            if (response.status === 401) sessionStorage.removeItem(adminTokenKey);
+            throw new Error(result?.error || `The request failed (HTTP ${response.status}).`);
+        }
         return result;
     }
     function applyRemoteData(siteData) {
@@ -107,12 +114,63 @@
                 music: read("music")
             })
         }),
-        login: password => request("/api/admin/login", {
-            method: "POST",
-            body: JSON.stringify({ password })
-        }),
+        uploadAudio: async file => {
+            const audioTypes = {
+                aac: "audio/aac",
+                flac: "audio/flac",
+                m4a: "audio/mp4",
+                mp3: "audio/mpeg",
+                ogg: "audio/ogg",
+                wav: "audio/wav",
+                webm: "audio/webm"
+            };
+            const extension = file.name.split(".").pop().toLowerCase();
+            const contentType = audioTypes[extension];
+            if (!contentType) throw new Error("Choose an MP3, WAV, FLAC, M4A, AAC, OGG, or WebM audio file.");
+            const headers = { "Content-Type": contentType };
+            const adminToken = sessionStorage.getItem(adminTokenKey);
+            if (adminToken) headers.Authorization = `Bearer ${adminToken}`;
+            const response = await fetch(new URL("/api/admin/media", apiBase), {
+                method: "POST",
+                body: file,
+                credentials: "include",
+                headers
+            });
+            const text = await response.text();
+            let result;
+            try {
+                result = text ? JSON.parse(text) : null;
+            } catch {
+                throw new Error("The server returned an invalid response.");
+            }
+            if (!response.ok) {
+                if (response.status === 401) sessionStorage.removeItem(adminTokenKey);
+                throw new Error(result?.error || `The upload failed (HTTP ${response.status}).`);
+            }
+            if (typeof result?.url !== "string") {
+                throw new Error("The server did not return the uploaded audio URL.");
+            }
+            return result.url;
+        },
+        login: async password => {
+            const result = await request("/api/admin/login", {
+                method: "POST",
+                body: JSON.stringify({ password })
+            });
+            if (typeof result?.token !== "string") {
+                throw new Error("The server did not create an Admin session. Please try signing in again.");
+            }
+            sessionStorage.setItem(adminTokenKey, result.token);
+            return result;
+        },
         checkAdminSession: () => request("/api/admin/session"),
-        logout: () => request("/api/admin/logout", { method: "POST" }),
+        logout: async () => {
+            try {
+                return await request("/api/admin/logout", { method: "POST" });
+            } finally {
+                sessionStorage.removeItem(adminTokenKey);
+            }
+        },
         assetURL,
         apiURL: path => new URL(path, apiBase).href,
         reset: () => Object.keys(keys).forEach(key => localStorage.removeItem(keys[key]))
