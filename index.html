@@ -136,8 +136,55 @@
         .menu {
             display: none;
             background: none;
-            border: 0;
-            font-size: 24px
+            border: 1px solid var(--line);
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            color: var(--white);
+            cursor: pointer
+        }
+
+        .menu-icon {
+            position: relative;
+            display: block;
+            width: 18px;
+            height: 2px;
+            margin: auto;
+            background: currentColor;
+            transition: background .2s
+        }
+
+        .menu-icon::before,
+        .menu-icon::after {
+            position: absolute;
+            left: 0;
+            width: 18px;
+            height: 2px;
+            background: currentColor;
+            content: "";
+            transition: transform .2s, top .2s
+        }
+
+        .menu-icon::before {
+            top: -6px
+        }
+
+        .menu-icon::after {
+            top: 6px
+        }
+
+        .menu[aria-expanded="true"] .menu-icon {
+            background: transparent
+        }
+
+        .menu[aria-expanded="true"] .menu-icon::before {
+            top: 0;
+            transform: rotate(45deg)
+        }
+
+        .menu[aria-expanded="true"] .menu-icon::after {
+            top: 0;
+            transform: rotate(-45deg)
         }
 
         .hero {
@@ -340,7 +387,31 @@
             border-radius: 50%;
             width: 40px;
             height: 40px;
+            color: var(--gold);
+            font-size: 0;
             cursor: pointer
+        }
+
+        .play::before {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 10px solid currentColor;
+            content: "";
+            transform: translate(-35%, -50%)
+        }
+
+        .play.is-playing::before {
+            width: 4px;
+            height: 13px;
+            border: 0;
+            background: currentColor;
+            box-shadow: 6px 0 0 currentColor;
+            transform: translate(-50%, -50%)
         }
 
         .meta {
@@ -758,7 +829,7 @@
             <nav class="links" id="nav"><a href="index.html">Home</a><a href="discography.html">Discography</a><a
                     href="beats.html">Beat Store</a></nav>
             <div class="right">
-                <button class="menu" id="menu" aria-label="Open navigation" aria-expanded="false">☰</button>
+                <button class="menu" id="menu" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button>
             </div>
         </div>
     </header>
@@ -793,7 +864,7 @@
                         <div class="cover"><img loading="lazy"
                                 src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=720&q=80"
                                 alt="Midnight City placeholder artwork"><span class="tag">Afro-fusion</span><button
-                                class="play" data-track="Midnight City" aria-label="Preview Midnight City">▶</button>
+                                class="play" data-track="Midnight City" aria-label="Preview Midnight City" aria-pressed="false"></button>
                         </div>
                         <div class="beatinfo">
                             <div class="meta"><span>Afro-fusion · 102 BPM</span><span>02:48</span></div>
@@ -806,7 +877,7 @@
                         <div class="cover"><img loading="lazy"
                                 src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=720&q=80"
                                 alt="Blue Hour placeholder artwork"><span class="tag">Alté / R&B</span><button
-                                class="play" data-track="Blue Hour" aria-label="Preview Blue Hour">▶</button></div>
+                                class="play" data-track="Blue Hour" aria-label="Preview Blue Hour" aria-pressed="false"></button></div>
                         <div class="beatinfo">
                             <div class="meta"><span>Alté / R&B · 88 BPM</span><span>03:12</span></div>
                             <h3 class="beatname">Blue Hour</h3>
@@ -818,7 +889,7 @@
                         <div class="cover"><img loading="lazy"
                                 src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=720&q=80"
                                 alt="Open Roads placeholder artwork"><span class="tag">Afrobeats</span><button
-                                class="play" data-track="Open Roads" aria-label="Preview Open Roads">▶</button></div>
+                                class="play" data-track="Open Roads" aria-label="Preview Open Roads" aria-pressed="false"></button></div>
                         <div class="beatinfo">
                             <div class="meta"><span>Afrobeats · 110 BPM</span><span>02:56</span></div>
                             <h3 class="beatname">Open Roads</h3>
@@ -830,7 +901,7 @@
                         <div class="cover"><img loading="lazy"
                                 src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=720&q=80"
                                 alt="Afterglow placeholder artwork"><span class="tag">R&B</span><button class="play"
-                                data-track="Afterglow" aria-label="Preview Afterglow">▶</button></div>
+                                data-track="Afterglow" aria-label="Preview Afterglow" aria-pressed="false"></button></div>
                         <div class="beatinfo">
                             <div class="meta"><span>R&B · 94 BPM</span><span>03:04</span></div>
                             <h3 class="beatname">Afterglow</h3>
@@ -891,12 +962,12 @@
     <footer>
         <div class="wrap foot"><a class="brand" href="index.html">KLASSIKROOM<i>.</i></a><span>© <span id="year"></span>
                 KLASSIKROOM. All rights reserved.</span>
-            <div class="footlinks"><a href="beats.html">Beat store</a><a href="admin/admin.html">Admin</a></div>
+            <div class="footlinks"><a href="beats.html">Beat store</a><a href="admin/index.html">Admin</a></div>
         </div>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="site-data.js"></script>
-    <script>const menu = document.querySelector("#menu"), nav = document.querySelector("#nav"), toast = document.querySelector("#toast"); let timer; menu.onclick = () => { let o = nav.classList.toggle("open"); menu.setAttribute("aria-expanded", o); menu.textContent = o ? "×" : "☰" }; nav.querySelectorAll("a").forEach(a => a.onclick = () => { nav.classList.remove("open"); menu.textContent = "☰" }); document.querySelector("#year").textContent = new Date().getFullYear(); function note(s) { toast.textContent = s; toast.classList.add("show"); clearTimeout(timer); timer = setTimeout(() => toast.classList.remove("show"), 3200) } document.querySelectorAll(".play").forEach(b => b.onclick = () => { document.querySelectorAll(".play").forEach(x => x.textContent = "▶"); b.textContent = "Ⅱ"; note("Preview placeholder: " + b.dataset.track + ". Add an authorized audio file to enable playback.") });</script>
+    <script>const menu = document.querySelector("#menu"), nav = document.querySelector("#nav"), toast = document.querySelector("#toast"); let timer; menu.onclick = () => { let o = nav.classList.toggle("open"); menu.setAttribute("aria-expanded", o); menu.setAttribute("aria-label", o ? "Close navigation" : "Open navigation") }; nav.querySelectorAll("a").forEach(a => a.onclick = () => { nav.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); menu.setAttribute("aria-label", "Open navigation") }); document.querySelector("#year").textContent = new Date().getFullYear(); function note(s) { toast.textContent = s; toast.classList.add("show"); clearTimeout(timer); timer = setTimeout(() => toast.classList.remove("show"), 3200) } document.querySelectorAll(".play").forEach(b => b.onclick = () => note("Preview placeholder: " + b.dataset.track + ". Add an authorized audio file to enable playback."));</script>
     <script>
         (async () => {
         await SiteData.ready;
@@ -916,18 +987,20 @@
         const formatPrice = beat => Number(beat.price) > 0
             ? new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 2 }).format(Number(beat.price))
             : "Price not set";
-        document.getElementById("home-beats-grid").innerHTML = SiteData.getBeats().slice(0, 4).map(beat => `<article class="card"><div class="cover"><img loading="lazy" src="${htmlSafe(SiteData.assetURL(beat.image))}" alt="${htmlSafe(beat.title)} artwork"><span class="tag">${htmlSafe(beat.genre)}</span>${beat.stock === "sold" ? '<span class="tag" style="left:10px;right:auto">Sold out</span>' : ""}<button class="play" data-track="${htmlSafe(beat.title)}" data-audio="${htmlSafe(SiteData.assetURL(beat.audio))}" aria-label="Preview ${htmlSafe(beat.title)}">▶</button></div><div class="beatinfo"><div class="meta"><span>${htmlSafe(beat.genre)} · ${htmlSafe(beat.bpm)} BPM</span><span>${htmlSafe(beat.duration)}</span></div><h3 class="beatname">${htmlSafe(beat.title)}</h3><div class="beatfoot"><span>${beat.stock === "sold" ? "Sold out" : "View beat ↗"}</span><button type="button" class="price" data-beat-id="${htmlSafe(beat.id)}">${htmlSafe(formatPrice(beat))}</button></div></div></article>`).join("");
+        document.getElementById("home-beats-grid").innerHTML = SiteData.getBeats().slice(0, 4).map(beat => `<article class="card"><div class="cover"><img loading="lazy" src="${htmlSafe(SiteData.assetURL(beat.image))}" alt="${htmlSafe(beat.title)} artwork"><span class="tag">${htmlSafe(beat.genre)}</span>${beat.stock === "sold" ? '<span class="tag" style="left:10px;right:auto">Sold out</span>' : ""}<button class="play" data-track="${htmlSafe(beat.title)}" data-audio="${htmlSafe(SiteData.assetURL(beat.audio))}" aria-label="Preview ${htmlSafe(beat.title)}" aria-pressed="false"></button></div><div class="beatinfo"><div class="meta"><span>${htmlSafe(beat.genre)} · ${htmlSafe(beat.bpm)} BPM</span><span>${htmlSafe(beat.duration)}</span></div><h3 class="beatname">${htmlSafe(beat.title)}</h3><div class="beatfoot"><span>${beat.stock === "sold" ? "Sold out" : "View beat ↗"}</span><button type="button" class="price" data-beat-id="${htmlSafe(beat.id)}">${htmlSafe(formatPrice(beat))}</button></div></div></article>`).join("");
         const homeTracks = SiteData.getMusic();
         document.getElementById("home-music-grid").innerHTML = homeTracks.slice(0, 3).map(track => `<article class="release"><div class="art"><img loading="lazy" src="${htmlSafe(SiteData.assetURL(track.image))}" alt="${htmlSafe(track.title)} cover art"></div><div class="releasecopy"><div class="meta"><span>${htmlSafe(track.genre)}</span><span>${htmlSafe(track.year)}</span></div><h3>${htmlSafe(track.title)}</h3><p>${htmlSafe(track.description)}</p></div></article>`).join("") || '<div class="release-empty">No releases published yet.</div>';
         document.querySelectorAll(".play").forEach(button => button.onclick = () => {
             const source = SiteData.assetURL(button.dataset.audio);
             if (!source) { note("Add a valid audio preview URL for " + button.dataset.track + " in Admin."); return; }
-            if (homeAudio.src === source && !homeAudio.paused) { homeAudio.pause(); button.textContent = "▶"; return; }
+            if (homeAudio.src === source && !homeAudio.paused) { homeAudio.pause(); button.classList.remove("is-playing"); button.setAttribute("aria-pressed", "false"); return; }
             homeAudio.src = source;
             homeAudio.play().catch(() => note("Unable to play this audio preview."));
-            document.querySelectorAll(".play").forEach(item => item.textContent = "▶");
-            button.textContent = "Ⅱ";
+            document.querySelectorAll(".play").forEach(item => { item.classList.remove("is-playing"); item.setAttribute("aria-pressed", "false"); });
+            button.classList.add("is-playing");
+            button.setAttribute("aria-pressed", "true");
         });
+        homeAudio.addEventListener("ended", () => document.querySelectorAll(".play").forEach(item => { item.classList.remove("is-playing"); item.setAttribute("aria-pressed", "false"); }));
         })();
     </script>
     <script>

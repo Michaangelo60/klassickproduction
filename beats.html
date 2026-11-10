@@ -270,7 +270,31 @@
             border-radius: 50%;
             border: 1px solid #ffffff99;
             background: #111a;
+            color: var(--gold);
+            font-size: 0;
             cursor: pointer
+        }
+
+        .play::before {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 10px solid currentColor;
+            content: "";
+            transform: translate(-35%, -50%)
+        }
+
+        .play.is-playing::before {
+            width: 4px;
+            height: 13px;
+            border: 0;
+            background: currentColor;
+            box-shadow: 6px 0 0 currentColor;
+            transform: translate(-50%, -50%)
         }
 
         .info {
@@ -595,7 +619,7 @@
         </div>
     </main>
     <footer>
-        <div class="wrap">© <span id="year"></span> KLASSIKROOM · Beat catalog · <a href="admin/admin.html">Admin</a></div>
+        <div class="wrap">© <span id="year"></span> KLASSIKROOM · Beat catalog · <a href="admin/index.html">Admin</a></div>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="site-data.js"></script>
@@ -686,7 +710,7 @@
                         <img loading="lazy" src="${escapeHTML(SiteData.assetURL(beat.image))}" alt="${escapeHTML(beat.title)} artwork">
                         <span class="tag">${escapeHTML(beat.genre)}</span>
                         <span class="status ${beat.stock === "sold" ? "sold" : ""}">${beat.stock === "sold" ? "Sold out" : "Available"}</span>
-                        <button class="play" aria-label="Preview ${escapeHTML(beat.title)}" data-title="${escapeHTML(beat.title)}" data-audio="${escapeHTML(beat.audio)}">▶</button>
+                        <button class="play" aria-label="Preview ${escapeHTML(beat.title)}" aria-pressed="false" data-title="${escapeHTML(beat.title)}" data-audio="${escapeHTML(beat.audio)}"></button>
                     </div>
                     <div class="info">
                         <div class="meta"><span>${escapeHTML(beat.genre)} · ${escapeHTML(beat.bpm)} BPM</span><span>${escapeHTML(beat.duration)}</span></div>
@@ -702,11 +726,12 @@
             grid.querySelectorAll(".play").forEach(button => button.onclick = () => {
                 const source = SiteData.assetURL(button.dataset.audio);
                 if (!source) { note("Add an audio preview URL for " + button.dataset.title + " in Admin."); return; }
-                if (audio.src === source && !audio.paused) { audio.pause(); button.textContent = "▶"; return; }
+                if (audio.src === source && !audio.paused) { audio.pause(); button.classList.remove("is-playing"); button.setAttribute("aria-pressed", "false"); return; }
                 audio.src = source;
                 audio.play().catch(() => note("Unable to play this audio preview."));
-                grid.querySelectorAll(".play").forEach(other => other.textContent = "▶");
-                button.textContent = "Ⅱ";
+                grid.querySelectorAll(".play").forEach(other => { other.classList.remove("is-playing"); other.setAttribute("aria-pressed", "false"); });
+                button.classList.add("is-playing");
+                button.setAttribute("aria-pressed", "true");
             });
             grid.querySelectorAll("[data-price]").forEach(button => button.onclick = () =>
                 note(button.textContent === "Price not set"

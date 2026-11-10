@@ -119,8 +119,50 @@
       height: 42px;
       padding: 0;
       cursor: pointer;
-      font-size: 22px;
       color: var(--white)
+    }
+
+    .menu-icon {
+      position: relative;
+      display: block;
+      width: 18px;
+      height: 2px;
+      margin: auto;
+      background: currentColor;
+      transition: background .2s
+    }
+
+    .menu-icon::before,
+    .menu-icon::after {
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      content: "";
+      transition: transform .2s, top .2s
+    }
+
+    .menu-icon::before {
+      top: -6px
+    }
+
+    .menu-icon::after {
+      top: 6px
+    }
+
+    .menu[aria-expanded="true"] .menu-icon {
+      background: transparent
+    }
+
+    .menu[aria-expanded="true"] .menu-icon::before {
+      top: 0;
+      transform: rotate(45deg)
+    }
+
+    .menu[aria-expanded="true"] .menu-icon::after {
+      top: 0;
+      transform: rotate(-45deg)
     }
 
     .hero {
@@ -305,6 +347,42 @@
       gap: 22px
     }
 
+    .social-links {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .social-links a {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: #c9c8c2;
+      transition: color .25s ease, border-color .25s ease, background .25s ease, transform .25s ease
+    }
+
+    .social-links a:hover {
+      color: #171614;
+      border-color: var(--gold);
+      background: var(--gold);
+      transform: translateY(-3px)
+    }
+
+    .social-links a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px
+    }
+
+    .social-links svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor
+    }
+
     @media(max-width:900px) {
       .grid {
         grid-template-columns: repeat(2, 1fr)
@@ -465,7 +543,7 @@
         <a href="discography.html" aria-current="page">Discography</a>
         <a href="beats.html">Beat Store</a>
       </nav>
-      <button class="menu" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <button class="menu" id="menu" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button>
     </div>
   </header>
 
@@ -635,10 +713,18 @@
     <div class="wrap footer-wrap">
       <a class="brand" href="index.html">KLASSIKROOM<i>.</i></a>
       <span>© <span id="year"></span> KLASSIKROOM · all rights reserved.</span>
+      <div class="social-links" aria-label="Social media">
+        <a href="https://www.tiktok.com/@krystal.omoba?_r=1&amp;_t=ZS-9BHm15VoB8O" target="_blank" rel="noopener noreferrer" aria-label="TikTok — Krystal Omoba">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.9 2.9 0 0 1-2.9 2.9 2.9 2.9 0 0 1-2.9-2.9 2.9 2.9 0 0 1 2.9-2.9c.3 0 .6.05.88.14V9.38a6.3 6.3 0 0 0-.88-.06 6.35 6.35 0 0 0-6.35 6.35 6.35 6.35 0 0 0 6.35 6.35 6.35 6.35 0 0 0 6.35-6.35V8.7a8.18 8.18 0 0 0 4.79 1.54V6.8c-.35 0-.7-.04-1.02-.11Z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/omoba_krystal____?psln=MTR1MHpqc253Z29xag%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram — Omoba Krystal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm4.5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-3.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg>
+        </a>
+      </div>
       <div class="footer-links">
         <a href="index.html">Home</a>
         <a href="beats.html">Beat store</a>
-        <a href="admin/admin.html">Admin</a>
+        <a href="admin/index.html">Admin</a>
       </div>
     </div>
   </footer>
@@ -653,14 +739,14 @@
     menuButton.addEventListener('click', () => {
       const isOpen = nav.classList.toggle('open');
       menuButton.setAttribute('aria-expanded', String(isOpen));
-      menuButton.textContent = isOpen ? '✕' : '☰';
+      menuButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
     });
 
     nav.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
         menuButton.setAttribute('aria-expanded', 'false');
-        menuButton.textContent = '☰';
+        menuButton.setAttribute('aria-label', 'Open navigation');
       });
     });
 
@@ -701,12 +787,16 @@
     await SiteData.ready;
     const musicGrid = document.getElementById("music-grid");
     const musicEsc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[char]));
+    const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const apiBase = isLocalhost
+      ? `${window.location.protocol}//${window.location.hostname}:3000`
+      : window.location.origin;
     const catalogAudio = new Audio();
     musicGrid.innerHTML = SiteData.getMusic().map(track => `<article class="card">
       <div class="cover"><img loading="lazy" src="${musicEsc(track.image)}" alt="${musicEsc(track.title)} album art"><span class="label">${musicEsc(track.genre)}</span></div>
       <div class="meta"><span>${musicEsc(track.year)}</span><span>${musicEsc(track.duration)}</span></div>
       <h3 class="name">${musicEsc(track.title)}</h3><p class="desc">${musicEsc(track.description)}</p>
-      <div class="player-actions"><button class="track-btn play-track" type="button" data-track="${musicEsc(track.title)}" data-src="${musicEsc(track.audio)}">Play</button>${track.audio ? `<a class="track-btn download" href="${musicEsc(track.audio)}" download="${musicEsc(track.title)}.mp3">Download</a>` : ""}</div>
+      <div class="player-actions"><button class="track-btn play-track" type="button" data-track="${musicEsc(track.title)}" data-src="${musicEsc(track.audio)}">Play</button>${track.audio ? `<a class="track-btn download" href="${musicEsc(apiBase)}/api/music/download/${encodeURIComponent(track.id)}">Download</a>` : ""}</div>
       <div class="foot"><span>${track.bpm ? musicEsc(track.bpm) + " BPM" : ""}</span><span>${musicEsc(track.type || "Release")}</span></div>
     </article>`).join("") || '<div class="release-empty">No releases published yet.</div>';
     musicGrid.querySelectorAll("img[src]").forEach(image => {

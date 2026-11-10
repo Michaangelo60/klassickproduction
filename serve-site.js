@@ -8,7 +8,7 @@ const pages = new Set([
   "index.html",
   "discography.html",
   "beats.html",
-  "admin/admin.html",
+  "admin/index.html",
   "site-data.js",
 ]);
 
