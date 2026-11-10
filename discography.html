@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="KLASSIKROOM discography featuring the latest original songs and releases.">
+  <meta name="theme-color" content="#111110">
+  <title>Discography — KLASSIKROOM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #111110;
+      --color-background: #111110;
+      --panel: #191918;
+      --line: #ffffff1c;
+      --muted: #aaa9a2;
+      --white: #f4f2ec;
+      --gold: #c6a875;
+      --max: 1240px
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable
+    }
+
+    body {
+      margin: 0;
+      background: var(--color-background);
+      color: var(--white);
+      font-family: "DM Sans", sans-serif
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 64px));
+      margin: auto
+    }
+
+    .brand {
+      font: 800 21px Manrope;
+      letter-spacing: .13em
+    }
+
+    .brand i {
+      color: var(--gold);
+      font-style: normal
+    }
+
+    header {
+      height: 82px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 10
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-size: 12px;
+      color: #c9c8c2
+    }
+
+    .navlinks a:hover {
+      color: var(--gold)
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--gold);
+      padding: 13px 18px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 10px;
+      transition: .2s
+    }
+
+    .btn:hover,
+    .btn.gold {
+      background: var(--gold);
+      color: #171614
+    }
+
+    .menu {
+      display: none;
+      background: none;
+      border: 1px solid var(--line);
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      cursor: pointer;
+      font-size: 22px;
+      color: var(--white)
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(100deg, #201f1c, #111110 65%)
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase
+    }
+
+    .hero h1 {
+      font: 500 clamp(48px, 7vw, 84px)/.98 Manrope;
+      letter-spacing: -.07em;
+      margin: 16px 0 12px
+    }
+
+    .hero p {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin: 0
+    }
+
+    .section-head {
+      padding: 34px 0 18px
+    }
+
+    .section-head h2 {
+      font: 500 clamp(30px, 4vw, 52px)/1.05 Manrope;
+      letter-spacing: -.06em;
+      margin: 8px 0 0
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      max-width: 520px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px 18px;
+      padding: 14px 0 80px
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      transition: .2s
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #ffffff35
+    }
+
+    .cover {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      background: #222
+    }
+
+    .cover img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.72);
+      transition: .5s
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+      filter: saturate(1)
+    }
+
+    .label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 7px 9px;
+      background: #111b;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .1em
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: #aaa89f;
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 14px 14px 0
+    }
+
+    .name {
+      font: 600 16px Manrope;
+      padding: 10px 14px 0;
+      margin: 0
+    }
+
+    .desc {
+      padding: 10px 14px 16px;
+      color: #b7b2a8;
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 0
+    }
+
+    .player-actions {
+      display: flex;
+      gap: 8px;
+      padding: 0 14px 12px
+    }
+
+    .track-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      border: 1px solid var(--line);
+      background: #121211;
+      color: var(--white);
+      padding: 10px 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      cursor: pointer;
+      transition: .2s
+    }
+
+    .track-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    .track-btn.download {
+      background: transparent
+    }
+
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding: 12px 14px 14px;
+      color: #aaa89f;
+      font-size: 10px
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0;
+      color: #8d8b84;
+      font-size: 10px;
+      letter-spacing: .08em
+    }
+
+    .footer-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px
+    }
+
+    @media(max-width:900px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .navlinks {
+        gap: 16px;
+        font-size: 11px
+      }
+
+      .btn {
+        padding: 11px 14px
+      }
+    }
+
+    @media(max-width:620px) {
+      .wrap {
+        width: calc(100% - 36px)
+      }
+
+      header {
+        height: 72px
+      }
+
+      .nav {
+        position: relative
+      }
+
+      .navlinks {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px 18px 22px;
+        background: #171716;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line)
+      }
+
+      .navlinks.open {
+        display: flex
+      }
+
+      .menu {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 18px
+      }
+
+      .hero {
+        padding: 56px 0 36px
+      }
+
+      .footer-wrap {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .name {
+        font-size: 15px
+      }
+
+      .player-actions {
+        flex-direction: row
+      }
+
+      .track-btn {
+        min-width: 0
+      }
+    }
+
+    @media(max-width:480px) {
+      .wrap {
+        width: calc(100% - 24px)
+      }
+
+      .grid {
+        gap: 14px
+      }
+
+      .card {
+        border-radius: 0
+      }
+
+      .cover {
+        aspect-ratio: 1.25
+      }
+
+      .meta {
+        padding: 12px 12px 0;
+        font-size: 8px;
+        letter-spacing: .06em
+      }
+
+      .name {
+        padding: 8px 12px 0;
+        font-size: 15px
+      }
+
+      .desc {
+        padding: 8px 12px 12px;
+        font-size: 11px;
+        line-height: 1.55
+      }
+
+      .player-actions {
+        flex-direction: column;
+        padding: 0 12px 10px;
+        gap: 6px
+      }
+
+      .track-btn {
+        width: 100%;
+        padding: 10px 8px;
+        font-size: 9px;
+        letter-spacing: .09em
+      }
+
+      .foot {
+        padding: 10px 12px 12px;
+        font-size: 8px;
+        gap: 8px;
+        flex-wrap: wrap
+      }
+
+      .label {
+        font-size: 8px;
+        padding: 6px 8px;
+        top: 8px;
+        left: 8px
+      }
+
+      .hero h1 {
+        font-size: 42px
+      }
+
+      .section-head h2 {
+        font-size: 30px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html">KLASSIKROOM<i>.</i></a>
+      <nav class="navlinks" id="nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="discography.html" aria-current="page">Discography</a>
+        <a href="beats.html">Beat Store</a>
+      </nav>
+      <button class="menu" id="menu" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Discography</div>
+        <h1>OMOBA KRYSTAL.</h1>
+        <p>Original songs, late-night edits, and production-led cuts from the KLASSIKROOM archive.</p>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">All releases</div>
+        <h2>Tracks in rotation.</h2>
+      </div>
+      <div class="grid" id="music-grid">
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80"
+              alt="Midnight City album art">
+            <span class="label">Afro-fusion</span>
+          </div>
+          <div class="meta"><span>2024</span><span>02:48</span></div>
+          <h3 class="name">Midnight City</h3>
+          <p class="desc">Moody textures, glassy synths, and a warm pulse built for late-night motion.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Midnight City"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+              download="Midnight City.mp3">Download</a>
+          </div>
+          <div class="foot"><span>102 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=900&q=80"
+              alt="Blue Hour album art">
+            <span class="label">Alté / R&B</span>
+          </div>
+          <div class="meta"><span>2024</span><span>03:12</span></div>
+          <h3 class="name">Blue Hour</h3>
+          <p class="desc">Dreamlike chords and intimate vocal space with a slow, glowing pull.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Blue Hour"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+              download="Blue Hour.mp3">Download</a>
+          </div>
+          <div class="foot"><span>88 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+              alt="Open Roads album art">
+            <span class="label">Afrobeats</span>
+          </div>
+          <div class="meta"><span>2023</span><span>02:56</span></div>
+          <h3 class="name">Open Roads</h3>
+          <p class="desc">A bright, forward-driving cut full of rhythm, uplift, and movement.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Open Roads"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+              download="Open Roads.mp3">Download</a>
+          </div>
+          <div class="foot"><span>110 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=80"
+              alt="Afterglow album art">
+            <span class="label">R&B</span>
+          </div>
+          <div class="meta"><span>2023</span><span>03:04</span></div>
+          <h3 class="name">Afterglow</h3>
+          <p class="desc">Soft percussion and a slow-burning melodic line for warm, reflective moments.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Afterglow"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+              download="Afterglow.mp3">Download</a>
+          </div>
+          <div class="foot"><span>94 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80"
+              alt="Night Drive album art">
+            <span class="label">Trap</span>
+          </div>
+          <div class="meta"><span>2022</span><span>02:35</span></div>
+          <h3 class="name">Night Drive</h3>
+          <p class="desc">Dark rhythm, heavy bass, and a cinematic edge for the city after dark.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Night Drive"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+              download="Night Drive.mp3">Download</a>
+          </div>
+          <div class="foot"><span>140 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+              alt="Palmwine Skies album art">
+            <span class="label">Afrobeats</span>
+          </div>
+          <div class="meta"><span>2022</span><span>03:01</span></div>
+          <h3 class="name">Palmwine Skies</h3>
+          <p class="desc">Easygoing rhythm and glowing melodies that feel like a summer memory.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Palmwine Skies"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"
+              download="Palmwine Skies.mp3">Download</a>
+          </div>
+          <div class="foot"><span>98 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=900&q=80"
+              alt="Soft Focus album art">
+            <span class="label">R&B</span>
+          </div>
+          <div class="meta"><span>2021</span><span>02:51</span></div>
+          <h3 class="name">Soft Focus</h3>
+          <p class="desc">Intimate and delicate, built around gentle hooks and clean melodic space.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="Soft Focus"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"
+              download="Soft Focus.mp3">Download</a>
+          </div>
+          <div class="foot"><span>76 BPM</span><span>Single</span></div>
+        </article>
+
+        <article class="card">
+          <div class="cover">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80"
+              alt="New Frequency album art">
+            <span class="label">Afro-fusion</span>
+          </div>
+          <div class="meta"><span>2021</span><span>02:44</span></div>
+          <h3 class="name">New Frequency</h3>
+          <p class="desc">An energetic blend of rhythm and motion for forward-focus performance energy.</p>
+          <div class="player-actions">
+            <button class="track-btn play-track" type="button" data-track="New Frequency"
+              data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Play</button>
+            <a class="track-btn download" href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+              download="New Frequency.mp3">Download</a>
+          </div>
+          <div class="foot"><span>116 BPM</span><span>Single</span></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-wrap">
+      <a class="brand" href="index.html">KLASSIKROOM<i>.</i></a>
+      <span>© <span id="year"></span> KLASSIKROOM · all rights reserved.</span>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="beats.html">Beat store</a>
+        <a href="admin/admin.html">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="site-data.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const menuButton = document.getElementById('menu');
+    const nav = document.getElementById('nav');
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+      menuButton.textContent = isOpen ? '✕' : '☰';
+    });
+
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.textContent = '☰';
+      });
+    });
+
+    const audio = new Audio();
+    const playButtons = document.querySelectorAll('.play-track');
+
+    playButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const { src, track } = button.dataset;
+        const isCurrentTrack = audio.dataset.track === track && !audio.paused;
+
+        if (isCurrentTrack) {
+          audio.pause();
+          button.textContent = 'Play';
+          audio.dataset.track = '';
+          return;
+        }
+
+        audio.src = src;
+        audio.dataset.track = track;
+        audio.play();
+
+        playButtons.forEach((btn) => {
+          btn.textContent = btn === button ? 'Pause' : 'Play';
+        });
+      });
+    });
+
+    audio.addEventListener('ended', () => {
+      playButtons.forEach((btn) => {
+        btn.textContent = 'Play';
+      });
+      audio.dataset.track = '';
+    });
+  </script>
+  <script>
+    (async () => {
+    await SiteData.ready;
+    const musicGrid = document.getElementById("music-grid");
+    const musicEsc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[char]));
+    const catalogAudio = new Audio();
+    musicGrid.innerHTML = SiteData.getMusic().map(track => `<article class="card">
+      <div class="cover"><img loading="lazy" src="${musicEsc(track.image)}" alt="${musicEsc(track.title)} album art"><span class="label">${musicEsc(track.genre)}</span></div>
+      <div class="meta"><span>${musicEsc(track.year)}</span><span>${musicEsc(track.duration)}</span></div>
+      <h3 class="name">${musicEsc(track.title)}</h3><p class="desc">${musicEsc(track.description)}</p>
+      <div class="player-actions"><button class="track-btn play-track" type="button" data-track="${musicEsc(track.title)}" data-src="${musicEsc(track.audio)}">Play</button>${track.audio ? `<a class="track-btn download" href="${musicEsc(track.audio)}" download="${musicEsc(track.title)}.mp3">Download</a>` : ""}</div>
+      <div class="foot"><span>${track.bpm ? musicEsc(track.bpm) + " BPM" : ""}</span><span>${musicEsc(track.type || "Release")}</span></div>
+    </article>`).join("") || '<div class="release-empty">No releases published yet.</div>';
+    musicGrid.querySelectorAll("img[src]").forEach(image => {
+      const source = SiteData.assetURL(image.getAttribute("src"));
+      if (source) image.src = source; else image.removeAttribute("src");
+    });
+    musicGrid.querySelectorAll("a[href]").forEach(link => {
+      const source = SiteData.assetURL(link.getAttribute("href"));
+      if (source) link.href = source; else link.removeAttribute("href");
+    });
+    musicGrid.querySelectorAll(".play-track").forEach(button => button.onclick = () => {
+      const source = SiteData.assetURL(button.dataset.src);
+      if (!source) return;
+      if (catalogAudio.src === source && !catalogAudio.paused) { catalogAudio.pause(); button.textContent = "Play"; return; }
+      catalogAudio.src = source;
+      catalogAudio.play().catch(() => { button.textContent = "Play"; });
+      musicGrid.querySelectorAll(".play-track").forEach(other => other.textContent = other === button ? "Pause" : "Play");
+    });
+    })();
+  </script>
+</body>
+
+</html>

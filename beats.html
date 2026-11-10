@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#111110">
+    <meta name="description" content="Browse KLASSIKROOM's instrumentals by genre and availability.">
+    <title>Beat Store — KLASSIKROOM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #111110;
+            --color-background: #111110;
+            --panel: #191918;
+            --line: #ffffff1c;
+            --muted: #aaa9a2;
+            --white: #f4f2ec;
+            --gold: #c6a875;
+            --max: 1240px
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-gutter: stable
+        }
+
+        body {
+            margin: 0;
+            background: var(--color-background);
+            color: var(--white);
+            font-family: "DM Sans", sans-serif
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+            color: inherit
+        }
+
+        .wrap {
+            width: min(var(--max), calc(100% - 64px));
+            margin: auto
+        }
+
+        .brand {
+            font: 800 21px Manrope;
+            letter-spacing: .13em
+        }
+
+        .brand i {
+            color: var(--gold);
+            font-style: normal
+        }
+
+        header {
+            height: 82px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .navlinks {
+            display: flex;
+            gap: 30px;
+            font-size: 12px;
+            color: #c9c8c2
+        }
+
+        .navlinks a:hover {
+            color: var(--gold)
+        }
+
+        .cart-toggle {
+            border: 1px solid var(--gold);
+            background: transparent;
+            padding: 11px 14px;
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            cursor: pointer
+        }
+
+        .cart-toggle:hover {
+            background: var(--gold);
+            color: #171614
+        }
+
+        .btn {
+            border: 1px solid var(--gold);
+            background: transparent;
+            padding: 13px 18px;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            font-size: 10px;
+            cursor: pointer
+        }
+
+        .btn:hover,
+        .btn.gold {
+            background: var(--gold);
+            color: #171614
+        }
+
+        .hero {
+            padding: 76px 0 48px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(100deg, #201f1c, #111110 65%)
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: .2em;
+            text-transform: uppercase
+        }
+
+        .hero h1 {
+            font: 500 clamp(48px, 7vw, 82px)/.98 Manrope;
+            letter-spacing: -.07em;
+            margin: 17px 0
+        }
+
+        .hero h1 em {
+            font: italic 400 1em Georgia;
+            color: var(--gold)
+        }
+
+        .hero p {
+            max-width: 550px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8
+        }
+
+        .filters {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 34px 0 24px;
+            flex-wrap: wrap
+        }
+
+        .genres,
+        .availability {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: transparent;
+            color: #c9c8c2;
+            padding: 10px 14px;
+            font-size: 10px;
+            cursor: pointer
+        }
+
+        .chip.active,
+        .chip:hover {
+            border-color: var(--gold);
+            color: var(--gold)
+        }
+
+        .tools {
+            display: flex;
+            gap: 10px
+        }
+
+        .search,
+        .sort {
+            background: #191918;
+            border: 1px solid var(--line);
+            padding: 11px 13px;
+            font-size: 11px
+        }
+
+        .search {
+            min-width: 220px
+        }
+
+        .sort option {
+            background: #191918
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px 16px;
+            padding-bottom: 80px
+        }
+
+        .cover {
+            aspect-ratio: 1;
+            position: relative;
+            overflow: hidden;
+            background: #222
+        }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(.72);
+            transition: .5s
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+            filter: saturate(1)
+        }
+
+        .tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #111c;
+            padding: 7px 9px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .1em
+        }
+
+        .status {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 7px 9px;
+            background: var(--gold);
+            color: #171614;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            font-weight: 700
+        }
+
+        .status.sold {
+            background: #373633;
+            color: #ccc
+        }
+
+        .play {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ffffff99;
+            background: #111a;
+            cursor: pointer
+        }
+
+        .info {
+            padding-top: 13px
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: .08em;
+            text-transform: uppercase
+        }
+
+        .name {
+            font: 600 16px Manrope;
+            margin: 9px 0
+        }
+
+        .foot {
+            border-top: 1px solid var(--line);
+            padding-top: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            color: #aaa89f;
+            font-size: 10px
+        }
+
+        .price {
+            border: 0;
+            background: transparent;
+            padding: 0;
+            font: inherit;
+            color: var(--gold);
+            cursor: pointer
+        }
+
+        .add-to-cart {
+            border: 1px solid var(--gold);
+            background: transparent;
+            padding: 8px 10px;
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            cursor: pointer
+        }
+
+        .add-to-cart:hover:not(:disabled) {
+            background: var(--gold);
+            color: #171614
+        }
+
+        .add-to-cart:disabled {
+            border-color: var(--line);
+            color: #85837c;
+            cursor: not-allowed
+        }
+
+        .cart-panel {
+            display: grid;
+            gap: 16px;
+            margin: 0 0 30px;
+            padding: 20px;
+            border: 1px solid var(--gold);
+            background: linear-gradient(135deg, #201f1c, #151514)
+        }
+
+        .cart-panel[hidden] {
+            display: none
+        }
+
+        .cart-heading,
+        .cart-item,
+        .cart-total {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px
+        }
+
+        .cart-heading h2 {
+            margin: 0;
+            font: 600 18px Manrope
+        }
+
+        .cart-count,
+        .cart-note {
+            color: var(--muted);
+            font-size: 11px
+        }
+
+        .cart-items {
+            display: grid;
+            gap: 10px
+        }
+
+        .cart-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 12px
+        }
+
+        .cart-item-name {
+            display: grid;
+            gap: 4px
+        }
+
+        .cart-item-name small {
+            color: var(--muted);
+            font-size: 10px
+        }
+
+        .cart-remove,
+        .cart-clear {
+            border: 0;
+            background: none;
+            color: var(--muted);
+            text-decoration: underline;
+            cursor: pointer
+        }
+
+        .cart-total {
+            font-weight: 700
+        }
+
+        .cart-total strong {
+            color: var(--gold);
+            font-size: 16px
+        }
+
+        .cart-checkout {
+            justify-self: end;
+            border: 1px solid var(--gold);
+            background: var(--gold);
+            padding: 13px 18px;
+            color: #171614;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            cursor: pointer
+        }
+
+        .cart-checkout:disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+        .soldtext {
+            color: #85837c
+        }
+
+        .empty {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 50px;
+            color: var(--muted);
+            border: 1px solid var(--line)
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 24px 0;
+            color: #8d8b84;
+            font-size: 10px
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 3;
+            bottom: 22px;
+            left: 50%;
+            transform: translate(-50%, 15px);
+            opacity: 0;
+            padding: 13px 18px;
+            background: var(--gold);
+            color: #171614;
+            font-size: 12px;
+            transition: .2s;
+            pointer-events: none
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:620px) {
+            .wrap {
+                width: calc(100% - 36px)
+            }
+
+            header {
+                height: 70px
+            }
+
+            .navlinks {
+                gap: 13px;
+                font-size: 10px
+            }
+
+            .navlinks a:first-child {
+                display: none
+            }
+
+            .hero {
+                padding: 55px 0 36px
+            }
+
+            .filters {
+                align-items: stretch;
+                flex-direction: column
+            }
+
+            .tools {
+                width: 100%
+            }
+
+            .search {
+                flex: 1;
+                min-width: 0
+            }
+
+            .grid {
+                gap: 23px 10px
+            }
+
+            .name {
+                font-size: 14px
+            }
+
+            .meta,
+            .foot {
+                font-size: 8px
+            }
+
+            .cart-panel {
+                padding: 15px
+            }
+
+            .cart-checkout {
+                width: 100%
+            }
+
+            .chip {
+                padding: 9px 10px
+            }
+        }
+
+        @media(max-width:400px) {
+            .navlinks {
+                gap: 9px
+            }
+
+            .navlinks a {
+                font-size: 9px
+            }
+
+            .brand {
+                font-size: 17px
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap nav"><a class="brand" href="index.html">KLASSIKROOM<i>.</i></a>
+            <nav class="navlinks"><a href="index.html">Home</a><a href="discography.html">Discography</a><a
+                    href="beats.html" aria-current="page">Beat Store</a></nav>
+            <button class="cart-toggle" id="cart-toggle" type="button" aria-controls="cart-panel" aria-expanded="false">Cart (0)</button>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <div class="eyebrow">Original instrumentals · Licensing inquiries</div>
+                <h1>Find the beat<br>that feels like <em>you.</em></h1>
+                <p>Explore the full catalog by genre. Preview tracks, check availability and prices, and contact the
+                    producer to discuss a license.</p>
+            </div>
+        </section>
+        <div class="wrap" id="beats">
+            <div class="filters">
+                <div class="genres" id="genres" aria-label="Filter beats by genre"></div>
+                <div class="availability" id="availability"><button class="chip active" data-stock="all">All
+                        beats</button><button class="chip" data-stock="available">Available</button><button class="chip"
+                        data-stock="sold">Sold out</button></div>
+                <div class="tools"><input class="search" id="search" type="search" placeholder="Search beats…"
+                        aria-label="Search beats"><select class="sort" id="sort" aria-label="Sort beats">
+                        <option value="newest">Newest first</option>
+                        <option value="title">Title A–Z</option>
+                        <option value="bpm">BPM low to high</option>
+                    </select></div>
+            </div>
+            <section class="cart-panel" id="cart-panel" aria-labelledby="cart-title" hidden>
+                    <div class="cart-heading">
+                        <h2 id="cart-title">Your cart</h2>
+                        <span class="cart-count" id="cart-count"></span>
+                        <button class="cart-clear" id="cart-clear" type="button">Clear cart</button>
+                    </div>
+                    <div class="cart-items" id="cart-items"></div>
+                    <div class="cart-total"><span>Total</span><strong id="cart-total"></strong></div>
+                    <p class="cart-note">Checkout opens WhatsApp with your order details. Payment is arranged directly with the producer.</p>
+                    <button class="cart-checkout" id="cart-checkout" type="button">Pay / Send order on WhatsApp</button>
+            </section>
+            <div class="grid" id="grid"></div>
+        </div>
+    </main>
+    <footer>
+        <div class="wrap">© <span id="year"></span> KLASSIKROOM · Beat catalog · <a href="admin/admin.html">Admin</a></div>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="site-data.js"></script>
+    <script>
+        (async () => {
+        await SiteData.ready;
+        const beats = SiteData.getBeats();
+        const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+        const apiBase = isLocalhost
+            ? `${window.location.protocol}//${window.location.hostname}:3000`
+            : window.location.origin;
+        const cartKey = "klassikroom.cart";
+        let cart = readCart();
+        let cartOpen = false;
+        let genre = "All genres", stock = "all", query = "", sort = "newest"; const grid = document.querySelector("#grid"), genres = document.querySelector("#genres"), toast = document.querySelector("#toast"); let timer;
+        function renderGenres() { genres.replaceChildren(); ["All genres", ...new Set(beats.map(b => b.genre))].forEach(g => { let x = document.createElement("button"); x.className = "chip" + (g === genre ? " active" : ""); x.textContent = g; x.onclick = () => { genre = g; renderGenres(); render() }; genres.append(x) }); }
+        renderGenres();
+        document.querySelectorAll("[data-stock]").forEach(x => x.onclick = () => { stock = x.dataset.stock; document.querySelectorAll("[data-stock]").forEach(y => y.classList.toggle("active", y === x)); render() });
+        document.querySelector("#search").oninput = e => { query = e.target.value.toLowerCase(); render() }; document.querySelector("#sort").onchange = e => { sort = e.target.value; render() };
+        function note(t) { toast.textContent = t; toast.classList.add("show"); clearTimeout(timer); timer = setTimeout(() => toast.classList.remove("show"), 3000) }
+        const audio = new Audio();
+        const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[char]));
+        function priceText(beat) {
+            if (beat.stock === "sold") return "No longer available";
+            if (!Number.isFinite(Number(beat.price)) || Number(beat.price) <= 0) return "Price not set";
+            return new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 2 }).format(Number(beat.price));
+        }
+        function readCart() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(cartKey) || "[]");
+                return Array.isArray(saved) ? [...new Set(saved.filter(id => typeof id === "string"))] : [];
+            } catch {
+                return [];
+            }
+        }
+        function saveCart() {
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            renderCart();
+        }
+        function renderCart() {
+            const panel = document.querySelector("#cart-panel");
+            const selected = cart.map(id => beats.find(beat => beat.id === id))
+                .filter(beat => beat && beat.stock !== "sold" && Number.isFinite(Number(beat.price)) && Number(beat.price) > 0);
+            const validIds = selected.map(beat => beat.id);
+            if (validIds.length !== cart.length) {
+                cart = validIds;
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+            }
+            panel.hidden = !cartOpen;
+            document.querySelector("#cart-count").textContent = `${selected.length} ${selected.length === 1 ? "beat" : "beats"}`;
+            const toggle = document.querySelector("#cart-toggle");
+            toggle.textContent = `Cart (${selected.length})`;
+            toggle.setAttribute("aria-expanded", String(cartOpen));
+            document.querySelector("#cart-items").innerHTML = selected.map(beat => `
+                <div class="cart-item">
+                    <span class="cart-item-name">${escapeHTML(beat.title)}<small>${escapeHTML(beat.genre)} · ${escapeHTML(beat.id)}</small></span>
+                    <strong>${escapeHTML(priceText(beat))}</strong>
+                    <button class="cart-remove" type="button" data-remove="${escapeHTML(beat.id)}" aria-label="Remove ${escapeHTML(beat.title)} from cart">Remove</button>
+                </div>`).join("");
+            const total = selected.reduce((sum, beat) => sum + Number(beat.price), 0);
+            if (selected.length === 0) {
+                document.querySelector("#cart-items").innerHTML = '<p class="cart-note">Your cart is empty. Add an available, priced beat below to get started.</p>';
+            }
+            document.querySelector("#cart-total").textContent = new Intl.NumberFormat("en-NG", {
+                style: "currency", currency: "NGN", maximumFractionDigits: 2
+            }).format(total);
+            document.querySelector("#cart-checkout").disabled = selected.length === 0;
+            document.querySelectorAll("[data-remove]").forEach(button => button.onclick = () => {
+                cart = cart.filter(id => id !== button.dataset.remove);
+                saveCart();
+                render();
+            });
+        }
+        function render() {
+            let items = beats.filter(b =>
+                (genre === "All genres" || b.genre === genre) &&
+                (stock === "all" || b.stock === stock) &&
+                (!query || (b.title + " " + b.genre + " " + b.mood).toLowerCase().includes(query))
+            );
+            if (sort === "title") items.sort((a, b) => a.title.localeCompare(b.title));
+            if (sort === "bpm") items.sort((a, b) => a.bpm - b.bpm);
+            if (sort === "newest") items.sort((a, b) => b.id.localeCompare(a.id));
+            grid.innerHTML = items.length ? items.map(beat => {
+                const canAdd = beat.stock !== "sold" && Number.isFinite(Number(beat.price)) && Number(beat.price) > 0;
+                const inCart = cart.includes(beat.id);
+                return `<article class="card">
+                    <div class="cover">
+                        <img loading="lazy" src="${escapeHTML(SiteData.assetURL(beat.image))}" alt="${escapeHTML(beat.title)} artwork">
+                        <span class="tag">${escapeHTML(beat.genre)}</span>
+                        <span class="status ${beat.stock === "sold" ? "sold" : ""}">${beat.stock === "sold" ? "Sold out" : "Available"}</span>
+                        <button class="play" aria-label="Preview ${escapeHTML(beat.title)}" data-title="${escapeHTML(beat.title)}" data-audio="${escapeHTML(beat.audio)}">▶</button>
+                    </div>
+                    <div class="info">
+                        <div class="meta"><span>${escapeHTML(beat.genre)} · ${escapeHTML(beat.bpm)} BPM</span><span>${escapeHTML(beat.duration)}</span></div>
+                        <h2 class="name">${escapeHTML(beat.title)}</h2>
+                        <div class="meta"><span>${escapeHTML(beat.mood)} mood</span><span>${escapeHTML(beat.id)}</span></div>
+                        <div class="foot">
+                            <button type="button" class="${beat.stock === "sold" ? "soldtext" : "price"}" data-price="${escapeHTML(beat.title)}">${escapeHTML(priceText(beat))}</button>
+                            <button type="button" class="add-to-cart" data-add="${escapeHTML(beat.id)}" ${canAdd && !inCart ? "" : "disabled"}>${inCart ? "Added" : canAdd ? "Add to cart" : "Unavailable"}</button>
+                        </div>
+                    </div>
+                </article>`;
+            }).join("") : '<div class="empty">No beats match these filters.</div>';
+            grid.querySelectorAll(".play").forEach(button => button.onclick = () => {
+                const source = SiteData.assetURL(button.dataset.audio);
+                if (!source) { note("Add an audio preview URL for " + button.dataset.title + " in Admin."); return; }
+                if (audio.src === source && !audio.paused) { audio.pause(); button.textContent = "▶"; return; }
+                audio.src = source;
+                audio.play().catch(() => note("Unable to play this audio preview."));
+                grid.querySelectorAll(".play").forEach(other => other.textContent = "▶");
+                button.textContent = "Ⅱ";
+            });
+            grid.querySelectorAll("[data-price]").forEach(button => button.onclick = () =>
+                note(button.textContent === "Price not set"
+                    ? "This beat doesn't have a price yet. Set one in Admin."
+                    : "Contact the producer to license this beat."));
+            grid.querySelectorAll("[data-add]").forEach(button => button.onclick = () => {
+                if (!cart.includes(button.dataset.add)) {
+                    cart.push(button.dataset.add);
+                    cartOpen = true;
+                    saveCart();
+                    render();
+                    note("Beat added to your cart.");
+                }
+            });
+        }
+        document.querySelector("#cart-clear").onclick = () => {
+            cart = [];
+            saveCart();
+            render();
+        };
+        document.querySelector("#cart-toggle").onclick = () => {
+            cartOpen = !cartOpen;
+            renderCart();
+            if (cartOpen) document.querySelector("#cart-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+        };
+        document.querySelector("#cart-checkout").onclick = () => {
+            const selected = cart.map(id => beats.find(beat => beat.id === id))
+                .filter(beat => beat && beat.stock !== "sold" && Number(beat.price) > 0);
+            if (!selected.length) {
+                note("Add an available, priced beat before checkout.");
+                return;
+            }
+            const beatIds = selected.map(beat => beat.id).join(",");
+            window.location.href = `${apiBase}/api/checkout/whatsapp?beats=${encodeURIComponent(beatIds)}`;
+        };
+        document.addEventListener("click", event => {
+            const button = event.target.closest(".play");
+            if (button) button.dataset.audio = SiteData.assetURL(button.dataset.audio);
+        }, true);
+        render();
+        renderCart();
+        document.querySelector("#year").textContent = new Date().getFullYear();
+        })();
+    </script>
+</body>
+
+</html>
